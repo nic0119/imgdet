@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse d'images</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Analyse d'images avec Azure Cognitive Services</h1>
+    </header>
+    <main>
+        <section class="upload-section">
+            <h2>Uploader une Image</h2>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <input type="file" name="image" accept="image/*" required>
+                <button type="submit">Analyser</button>
+            </form>
+        </section>
+        <section id="results">
+            {% if results %}
+            <h2>Résultats de l'Analyse</h2>
+            <div class="results-container">
+                <div class="metadata">
+                    <h3>Métadonnées</h3>
+                    <p><strong>Format :</strong> {{ results.metadata.format }}</p>
+                    <p><strong>Dimensions :</strong> {{ results.metadata.width }} x {{ results.metadata.height }}</p>
+                </div>
+                <div class="description">
+                    <h3>Description</h3>
+                    <p>{{ results.description.captions[0].text }}</p>
+                    <p><strong>Confiance :</strong> {{ results.description.captions[0].confidence | round(2) }}</p>
+                </div>
+                <div class="tags">
+                    <h3>Tags</h3>
+                    <ul>
+                        {% for tag in results.tags %}
+                        <li>{{ tag.name }} (Confiance : {{ tag.confidence | round(2) }})</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+        </section>
+    </main>
+    <footer>
+        <p>Projet Cloud Computing avec Azure Cognitive Services, Azure Storage Account, et Azure App Service | Déployé sur Microsoft Azure </p>
+    </footer>
+</body>
+</html>
